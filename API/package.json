@@ -1,0 +1,13 @@
+{
+  "name": "books-api",
+  "version": "1.0.0",
+  "description": "Enkelt REST API med Express och SQLite – Nivå 1",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "mysql2": "^3.9.1",
+    "express": "^4.18.3"
+  }
+}
