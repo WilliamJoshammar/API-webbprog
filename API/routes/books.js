@@ -47,4 +47,34 @@ router.post("/", (req, res) => {
   );
 });
 
+// PUT /books/:id – uppdaterar en bok baserat på id
+router.put("/:id", (req, res) => {
+  const { title, author, year } = req.body;
+
+  if (!title || !author) {
+    return res
+      .status(400)
+      .json({ error: "Fälten 'title' och 'author' är obligatoriska." });
+  }
+
+  db.query(
+    "UPDATE books SET title = ?, author = ?, year = ? WHERE id = ?",
+    [title, author, year ?? null, req.params.id],
+    (err, result) => {
+      if (err) return res.status(500).json({ error: err.message });
+      if (result.affectedRows === 0)
+        return res.status(404).json({ error: "Boken hittades inte." });
+
+      db.query(
+        "SELECT * FROM books WHERE id = ?",
+        [req.params.id],
+        (err, rows) => {
+          if (err) return res.status(500).json({ error: err.message });
+          res.json(rows[0]);
+        }
+      );
+    }
+  );
+});
+
 module.exports = router;
