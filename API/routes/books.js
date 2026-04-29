@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../src/db");
+const verifyToken = require("../middleware/authMiddleware");
+
+// Alla /books-routes kräver giltig JWT
+router.use(verifyToken);
 
 // GET /books – returnerar alla böcker
 router.get("/", (req, res) => {
