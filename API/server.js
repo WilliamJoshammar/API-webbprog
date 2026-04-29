@@ -14,4 +14,3 @@ app.use("/login", require("./routes/auth"));
 app.listen(PORT, () => {
   console.log(`Servern körs på http://localhost:${PORT}`);
 });
- 
