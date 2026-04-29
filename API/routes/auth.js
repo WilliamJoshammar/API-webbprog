@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const db = require("../src/db");
 
-// POST /login – loggar in en användare
-// Body: { "username": "...", "password": "..." }
+// POST /login – loggar in en användare och returnerar en JWT
 router.post("/", (req, res) => {
   const { username, password } = req.body;
 
@@ -31,9 +31,14 @@ router.post("/", (req, res) => {
         return res.status(401).json({ error: "Felaktigt användarnamn eller lösenord." });
       }
 
-      // Returnera användaren UTAN lösenords-hash
-      const { password_hash, ...safeUser } = user;
-      res.json(safeUser);
+      // Skapa JWT – token gäller i 1 timme
+      const token = jwt.sign(
+        { id: user.id, username: user.username },
+        "hemlig_nyckel_123",
+        { expiresIn: "1h" }
+      );
+
+      res.json({ token });
     }
   );
 });
